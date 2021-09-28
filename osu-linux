@@ -1,0 +1,56 @@
+#!/bin/bash
+
+HEIGHT=15
+WIDTH=40
+CHOICE_HEIGHT=4
+BACKTITLE="Creado por: Elsoberanox - https://www.youtube.com/c/JuegosenLinux"
+TITLE="www.juegosenlinux.site"
+MENU="Among Us - Elsoberanox"
+
+OPTIONS=(1 "Preparar Port"
+         2 "Instalar juego"
+         3 "Agregar a menu"
+         4 "Salir")
+
+CHOICE=$(dialog --clear \
+                --backtitle "$BACKTITLE" \
+                --title "$TITLE" \
+                --menu "$MENU" \
+                $HEIGHT $WIDTH $CHOICE_HEIGHT \
+                "${OPTIONS[@]}" \
+                2>&1 >/dev/tty)
+
+clear
+case $CHOICE in
+        1)
+mkdir $HOME/Juegos/Osu
+cd $HOME/Juegos/Osu
+wget https://archive.org/download/osu-installer/osu-installer
+sudo chmod +x osu-installer
+sudo mv osu-installer /usr/bin/
+wget https://archive.org/download/winetricks/winetricks
+sudo chmod +x winetricks
+sudo mv winetricks /usr/bin/
+wget https://archive.org/download/wineson.7z/wineson.7z
+7z x wineson.7z
+sudo rm -R wineson.7z
+sudo mv wineson /opt/
+wget https://archive.org/download/osu_20210927_202109/osu.exe -P $HOME/Juegos
+export WINEARCH=win32 WINEPREFIX=$HOME/Juegos/Osu
+export PATH=/usr/bin/
+winetricks dotnet40
+osu-installer
+            ;;
+        2)
+            export WINEARCH=win32 WINEPREFIX=$HOME/Juegos/Osu
+            export PATH=/opt/wineson/bin/
+            wine $HOME/Juegos/osu.exe
+            ;;
+        3)
+            uname -R
+            ;;
+            
+                    3)
+            exit
+            ;;
+esac
